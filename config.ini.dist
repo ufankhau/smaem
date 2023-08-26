@@ -1,5 +1,5 @@
-# Configuration file for sma-em.py
-# Source: https://github.com/ufankhau/sma-em
+# Configuration file for smaem-reporter.py
+# Source: https://github.com/ufankhau/smaem
 #
 # Uncomment and adapt settings as needed.
 # Some settings can be configured by environment variables.
@@ -7,11 +7,11 @@
 
 
 [LOG]
-# Enable logging to file sma-em.log in the directory of the application (Default: False)
+# Enable logging to file (Default: False)
 #log_to_file_enabled = True
-# Log filename (Default: sma-em.log in application directory)
-# Important: user daemon needs writting access to file!
-#log_filename = sma-em.log
+# Log filename (Default: smaem-reporter.log in application directory)
+# Important: user daemon needs writing access to directory!
+#log_filename = smaem-reporter.log
 # mode to access the log file: a(ppend) existing file or w(rite) new file (Default: a)
 #file_mode = a
 # Set file logging level ("DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL") (Default: WARNING)
@@ -50,7 +50,7 @@
 # The MQTT base topic under which to publish the Raspberry Pi device data topics.
 #base_topic = home/nodes
 
-# The MQTT name for the SMA Energy Meter as a device
+# The MQTT name for the SMA Energy Meter as a device (Default: smaem)
 #device_name = smaem
 
 # The MQTT broker authentification credentials (Default: no authentication)
