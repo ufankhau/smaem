@@ -241,7 +241,7 @@ def publish_to_mqtt(topic: str, payload: str, qos=0, retain=False):
     """
     log.debug(f"* Publishing to MQTT broker: topic: {topic}")
     log.debug(f"  data: {payload}")
-    mqtt_client.publish("{}".format(topic), payload=payload, qos=qos, retain=retain)
+    mqtt_client.publish(f"{topic}", payload=payload, qos=qos, retain=retain)
     sleep(0.5)
 
 
@@ -450,7 +450,7 @@ mqtt_client.on_connect = on_connect
 mqtt_client.on_publish = on_publish
 mqtt_client.on_disconnect = on_disconnect
 
-activity_topic = "{}/{}/status".format(base_topic, device_name.lower())
+activity_topic = f"{base_topic}/{device_name.lower()}/status"
 lwt_online_val = "online"
 lwt_offline_val = "offline"
 
@@ -499,7 +499,7 @@ start_alive_timer()
 emdata = {}
 emdata = get_data_from_sma_energy_meter()
 serial = str(emdata["serial"])
-uniqID = "SMA-{}EM{}".format(serial[:5], serial[5:])
+uniqID = f"SMA-{serial[:5]}EM{serial[5:]}"
 log.debug(f"uniqueID: {uniqID}")
 
 #  SMA Energy Meter reporting device
@@ -520,7 +520,7 @@ detectorValues = OrderedDict(
                 json_value="timestamp",
                 json_attr="yes",
                 icon="mdi:counter",
-                device_ident="SMA-EM-{}".format(emdata["serial"]),
+                device_ident=f"SMA-EM-{emdata['serial']}",
             ),
         ),
         (
@@ -551,9 +551,9 @@ detectorValues = OrderedDict(
 )
 log.info("* Announcing SMA Energy Meter to MQTT broker for auto-discovery")
 
-values_topic_rel = "{}/{}".format("~", LD_MONITOR)
-values_topic = "{}/sensor/{}/{}".format(base_topic, device_name.lower(), LD_MONITOR)
-activity_topic = "{}/{}/status".format(base_topic, device_name.lower())
+values_topic_rel = f"~/{LD_MONITOR}"
+values_topic = f"{base_topic}/sensor/{device_name.lower()}/{LD_MONITOR}"
+activity_topic = f"{base_topic}/{device_name.lower()}/status"
 
 log.debug(f"vaules topic rel: {values_topic_rel}")
 log.debug(f"values topic: {values_topic}")
@@ -561,16 +561,15 @@ log.debug(f"activity topic: {activity_topic}")
 
 
 for [sensor, params] in detectorValues.items():
-    discovery_topic = "{}/{}/{}/{}/config".format(
-        discovery_prefix, params["topic_category"], device_name.lower(), sensor
+    discovery_topic = (
+        f"{discovery_prefix}/{params['topic_category']}/"
+        + f"{device_name.lower()}/{sensor}/config"
     )
-    sensor_base_topic = "{}/{}/{}".format(
-        base_topic, params["topic_category"], device_name.lower()
-    )
+    sensor_base_topic = f"{base_topic}/{params['topic_category']}/{device_name.lower()}"
 
     payload = OrderedDict()
-    payload["name"] = "{}".format(params["title"].title())
-    payload["uniq_id"] = "{}_{}".format(uniqID, sensor.lower())
+    payload["name"] = f"{params['title'].title()}"
+    payload["uniq_id"] = f"{uniqID}_{sensor.lower()}"
 
     if "device_class" in params:
         payload["dev_cla"] = params["device_class"]
@@ -586,9 +585,9 @@ for [sensor, params] in detectorValues.items():
 
     if "json_value" in params:
         payload["stat_t"] = values_topic_rel
-        payload["val_tpl"] = "{{{{ value_json.{}.{} }}}}".format(
-            LDS_PAYLOAD_NAME, params["json_value"]
-        )
+        payload[
+            "val_tpl"
+        ] = f"{{{{ value_json.{LDS_PAYLOAD_NAME}.{params['json_value']} }}}}"
 
     payload["~"] = sensor_base_topic
     payload["avty_t"] = activity_topic
@@ -597,19 +596,17 @@ for [sensor, params] in detectorValues.items():
 
     if "json_attr" in params:
         payload["json_attr_t"] = values_topic_rel
-        payload["json_attr_tpl"] = "{{{{ value_json.{} | tojson }}}}".format(
-            LDS_PAYLOAD_NAME
-        )
+        payload["json_attr_tpl"] = "{{{{ value_json.{LDS_PAYLOAD_NAME} | tojson }}}}"
     if "device_ident" in params:
         payload["dev"] = {
-            "identifiers": ["{}".format(uniqID)],
+            "identifiers": [f"{uniqID}"],
             "manufacturer": "SMA Solar Technology AG",
             "name": params["device_ident"],
             "model": "Energy Meter",
-            "sw_version": "{}".format(emdata["speedwire_version"]),
+            "sw_version": f"{emdata['speedwire_version']}",
         }
     else:
-        payload["dev"] = {"identifiers": ["{}".format(uniqID)]}
+        payload["dev"] = {"identifiers": [f"{uniqID}"]}
 
     publish_to_mqtt(discovery_topic, payload=json.dumps(payload), qos=1, retain=True)
 
