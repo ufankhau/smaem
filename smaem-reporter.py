@@ -45,11 +45,11 @@ from datetime import datetime
 from collections import OrderedDict
 import paho.mqtt.client as mqtt
 
-script_version = "1.5.2"
-script_name = "sma-em.py"
+script_version = "1.5.3"
+script_name = "smaem-reporter.py"
 script_info = f"{script_name} v{script_version}"
 project_name = "SMA Energy Meter Integration into Home Assistant via MQTT"
-project_url = "https://github.com/ufankhau/sma-em"
+project_url = "https://github.com/ufankhau/smaem"
 
 
 #  define root logger 'log'
