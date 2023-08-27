@@ -1,5 +1,8 @@
 # folder documentation
 documentation/
 
-# gitignore
-.gitignore
+# Read Me
+**/README.md
+
+# Mac/OSX
+.DS_Store
