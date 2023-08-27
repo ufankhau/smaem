@@ -1,5 +1,5 @@
-# exclude folder documentation
+# folder documentation
 documentation/
 
-# exclude .gitignore
+# gitignore
 .gitignore
