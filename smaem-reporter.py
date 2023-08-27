@@ -4,8 +4,8 @@
 SMA Energy Meter Integration into Home Assistant via MQTT
 
 The script needs a configuration file config.ini to retrieve details to 
-connect to the MQTT broker. Reporting frequency as well as logging to file
-can also be specified via the config file. 
+connect to the MQTT broker of Home Assistant. Reporting frequency as well 
+as logging to file can also be set via the config file. 
 
 The script can be called with the following options:
     -v (--verbose): to increase the output verbosity
@@ -17,7 +17,7 @@ The script uses the module 'smaem_decoder' to decode the udp telegram
 message received from the SMA Energy Meter. Details on the message content
 can be found in the respective script. For the time being only 2 counters,
 'total_energy_consumed' and 'total_energy_supplied', are configured for
-reporting to homeassistant. Script can be extended to report more values. 
+reporting to Home Assistant. Script can be extended to report more values. 
 Use debug option to console or file to see full list of available values 
 and counters.
 """
@@ -55,12 +55,6 @@ project_url = "https://github.com/ufankhau/smaem"
 #  define root logger 'log'
 log = logging.getLogger()
 
-if False:
-    # will be caught by python 2.7 to be illegal syntax
-    log.error("Sorry, this script requires a python3 runtime environment")
-    os._exit(1)
-
-
 #  construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser(description=project_name)
 ap.add_argument(
@@ -85,7 +79,6 @@ TIMER_INTERRUPT = -1
 
 #  initialize variables
 local_tz = get_localzone()
-smaserials = ""
 ch_config = {}
 fh_config = {}
 
@@ -187,11 +180,11 @@ def get_data_from_sma_energy_meter():
             "* SOCKET: could not connect to multicast group or bind to given interface"
         )
         sys.exit(1)
-    smaeminfo = sock.recv(1024)
+    smaem_info = sock.recv(1024)
     # sock.shutdown()
     sock.close()
     sleep(0.3)
-    return decode_SMAEM(smaeminfo)
+    return decode_SMAEM(smaem_info)
 
 
 #  MQTT callback and helper functions
