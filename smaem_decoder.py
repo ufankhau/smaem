@@ -6,7 +6,7 @@ SMA Energy Meter on port 9522 of the multicast group 239.12.255.254
  
 Documentation of the protocol is unfortunately only available in German. It 
 can be downloaded from:
-    https://github.com/ufankhau/sma-empv/documentation/SMA-EM_GE.pdf
+    https://github.com/ufankhau/template/blob/main/SMA_EM_GE.pdf
 
 The core of the following code is taken from the work of david-m-m and
 datenschuft (https://github.com/datenschuft/SMA-EM) and adjusted to fit
