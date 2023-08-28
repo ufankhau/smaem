@@ -1,5 +1,5 @@
 # folder documentation
-/documentation/
+documentation/*
 
 # .gitignore
 .gitignore
